@@ -1,0 +1,6 @@
+*.xlsx
+/data/*
+*.pdf
+/pdf/*
+
+people.json
