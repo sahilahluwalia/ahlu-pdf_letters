@@ -32,14 +32,10 @@ const PDFMaker=async (arrayToBeSearched)=>{
     for(let i=0; i<arrayToBeSearched.length; i++){
         // console.log(arrayToBeSearched)
         const fileDirectory=`pdf/${arrayToBeSearched[i].type}/`
-        console.log(fileDirectory)
-        console.log(fs.existsSync(fileDirectory))
         if (!fs.existsSync(fileDirectory)){
             fs.mkdirSync(fileDirectory,{ recursive: true });
-            console.log('inside')
             console.log('Folder Created Successfully.');
         }
-        console.log('after')
         const option = {
             format: 'A4',
             printBackground: true,
