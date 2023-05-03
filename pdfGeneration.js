@@ -40,7 +40,7 @@ const PDFMaker=async (arrayToBeSearched)=>{
             format: 'A4',
             printBackground: true,
             // scale: 0.7,
-            path: `pdf/${arrayToBeSearched[i].type}/${arrayToBeSearched[i].name}.pdf`,
+            path: `pdf/${arrayToBeSearched[i].type}/${arrayToBeSearched[i].id}-${arrayToBeSearched[i].name}.pdf`,
             // preferCSSPageSize: true
         }
         await page.goto(baseURL+'?'+querystring.stringify(arrayToBeSearched[i]), {
