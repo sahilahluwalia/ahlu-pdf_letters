@@ -12,7 +12,7 @@ const getOnlyIncomplete = (arrayToBeSearched)=>{
     })
 }
 
-const testURL='http://localhost:3000/pdf?realID=6446a22e-c565-4c5f-8f11-b394ce94ca43&company=Swastik%20Engitech%20Private%20Limited&name=Mr.%20Prashant%20Bansal%20&id=T%2F0010&gender=Mr.&type=1&isComplete=false'
+// const testURL='http://localhost:3000/pdf?realID=6446a22e-c565-4c5f-8f11-b394ce94ca43&company=Swastik%20Engitech%20Private%20Limited&name=Mr.%20Prashant%20Bansal%20&id=T%2F0010&gender=Mr.&type=1&isComplete=false'
 
 const completeOperation=async (id,arrayToBeSearched)=>{
     const objIndex = arrayToBeSearched.findIndex((obj => obj.realID == id));
@@ -28,31 +28,45 @@ const PDFMaker=async (arrayToBeSearched)=>{
     headless:false
 });
         const page = await browser.newPage();
-        
+        if(arrayToBeSearched.length==0){
+            console.log('All PDFs are generated')
+            await browser.close();
+        }
     for(let i=0; i<arrayToBeSearched.length; i++){
+        if(arrayToBeSearched[i].isComplete==true){
+            console.log(arrayToBeSearched[i].name+ ' of ',arrayToBeSearched[i].company,' is already completed')
+            continue
+        }
+        
         // console.log(arrayToBeSearched)
         const fileDirectory=`pdf/${arrayToBeSearched[i].type}/`
         if (!fs.existsSync(fileDirectory)){
             fs.mkdirSync(fileDirectory,{ recursive: true });
             console.log('Folder Created Successfully.');
         }
+        const string=arrayToBeSearched[i].id
+        // remove / from the string
+        const stringAfterSlash=string.replace(/\//g, "-");
+
         const option = {
             format: 'A4',
             printBackground: true,
             // scale: 0.7,
-            path: `pdf/${arrayToBeSearched[i].type}/${arrayToBeSearched[i].id}-${arrayToBeSearched[i].name}.pdf`,
+            path: `pdf/${arrayToBeSearched[i].type}/${stringAfterSlash}_${arrayToBeSearched[i].name}.pdf`,
             // preferCSSPageSize: true
         }
+        // console.log(baseURL+'?'+querystring.stringify(arrayToBeSearched[i]))
         await page.goto(baseURL+'?'+querystring.stringify(arrayToBeSearched[i]), {
             waitUntil:'networkidle2'
         });
         await page.pdf(option);
         // console.log(baseURL+'?'+querystring.stringify(arrayToBeSearched[i]))
-        if(Math.random()>0.5){
             const modifiedArray=await completeOperation(arrayToBeSearched[i].realID,arrayToBeSearched)
             // console.log('array length is ',modifiedArray.length)
             saveProgress(modifiedArray)
-        } else {
+        if(arrayToBeSearched.length==i+1){
+            console.log('All PDFs are generated')
+            await browser.close();
         }
     }
   

@@ -23,7 +23,7 @@ function main() {
       name: item.Name,
       id: item['Reference No.'],
       gender: item['Mr. /Mrs.'],
-      data: item.Date,
+      date: item.Date,
       designation: item.Post,
       type: item.Type,
       isComplete: false,
