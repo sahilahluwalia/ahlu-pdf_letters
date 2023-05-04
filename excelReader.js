@@ -16,6 +16,8 @@ const getFile = () => {
 function main() {
   const file = reader.readFile(getFile())
   const masterData = reader.utils.sheet_to_json(file.Sheets[file.SheetNames[0]])
+  console.log('first entry in excel file')
+  console.log(masterData[0])
   const PeopleObject = masterData.map((item) => {
     return {
       realID: uuid.v4(),
@@ -29,15 +31,19 @@ function main() {
       isComplete: false,
     }
   })
-  console.log('first object is')
+  console.log('Saved first object is')
   console.log(PeopleObject[0])
+  
 
+
+  
 
   fs.writeFile('people.json', JSON.stringify(PeopleObject), (err) => {
     if (err) {
       throw err
     }
     console.log("JSON data is saved. Run next command")
+    console.log("Total number of people is ", PeopleObject.length)
   })
 }
 main()
